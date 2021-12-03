@@ -1,0 +1,27 @@
+*.swp
+package-lock.json
+.pytest_cache
+*.egg-info
+.DS_store 
+vars.py
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.idea
+
+# CDK Context & Staging files
+.cdk.staging/
+cdk.out/*
+aws-codebuild-docker-images
+cdk.context.jso

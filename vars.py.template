@@ -1,0 +1,5 @@
+var_region = '<region>'
+var_vpc_id = "<vpc-id>"  # Existing VPC
+var_account_id = '<account-id>'
+var_ec2_type = "t2.micro"
+cert_arn = "certificate-arn" # Existing Certificate from ACM

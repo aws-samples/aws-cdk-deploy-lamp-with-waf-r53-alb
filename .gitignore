@@ -4,6 +4,7 @@ package-lock.json
 *.egg-info
 .DS_store 
 vars.py
+Pip*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

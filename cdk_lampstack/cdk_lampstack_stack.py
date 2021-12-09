@@ -15,10 +15,12 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  '''
- 
+
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
-import os, sys
+from vars import *
+import os
+import sys
 
 from aws_cdk.aws_s3_assets import Asset
 
@@ -34,13 +36,13 @@ from aws_cdk import core
 import vars
 
 sys.path.append(os.path.abspath(os.curdir))
-from vars import *
 
 with open("./user_data/user_data.sh") as f:
     user_data = f.read()
 
 # import WAF arn from  waf_regoinal stack
-wafacl_alb_arn = core.Fn.import_value("WafRegionalStack:WafAclRegionalArn");
+wafacl_alb_arn = core.Fn.import_value("WafRegionalStack:WafAclRegionalArn")
+
 
 class CdkLampstackStack(cdk.Stack):
 
@@ -58,32 +60,52 @@ class CdkLampstackStack(cdk.Stack):
                                                           virtualization=ec2.AmazonLinuxVirt.HVM,
                                                           storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE)
 
-        # Instance Role and SSM Managed Policy
-        role = iam.Role(self, "InstanceSSM", assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"))
+        # Instnace Volume
+        block_device_volume = autoscaling.BlockDeviceVolume.ebs(
+            volume_size=8,
+            encrypted=True,
+        )
 
-        role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore"))
+        block_device = autoscaling.BlockDevice(
+            device_name="/dev/xvda",
+            volume=block_device_volume,
+        )
+
+        # Instance Role and SSM Managed Policy
+        role = iam.Role(self, "InstanceSSM",
+                        assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"))
+
+        role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name(
+            "AmazonSSMManagedInstanceCore"))
 
         # Instance
         asg = autoscaling.AutoScalingGroup(self, "myASG", instance_type=ec2.InstanceType(var_ec2_type),
                                            machine_image=amzn_linux, vpc=vpc, role=role,
-                                           vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE),
-                                           user_data=ec2.UserData.custom(user_data),  
+                                           vpc_subnets=ec2.SubnetSelection(
+                                               subnet_type=ec2.SubnetType.PRIVATE),
+                                           user_data=ec2.UserData.custom(
+                                               user_data),
+                                           block_devices=[block_device]
                                            )
 
         # Import existing certificate
-        cert_arn = vars.cert_arn        
-        certificate = acm.Certificate.from_certificate_arn(self, 'Certificate', certificate_arn=cert_arn)
+        cert_arn = vars.cert_arn
+        certificate = acm.Certificate.from_certificate_arn(
+            self, 'Certificate', certificate_arn=cert_arn)
 
         # ALB
-        alb = elbv2.ApplicationLoadBalancer(self, "lampALB", vpc=vpc, internet_facing=True)
+        alb = elbv2.ApplicationLoadBalancer(
+            self, "lampALB", vpc=vpc, internet_facing=True,)
 
-        https_listener = alb.add_listener("ALBListenerHttps", port=443, certificates=[certificate], protocol=elbv2.ApplicationProtocol.HTTPS, ssl_policy=elbv2.SslPolicy.TLS12)
+        alb.set_attribute(
+            key="routing.http.drop_invalid_header_fields.enabled", value="true")
+
+        https_listener = alb.add_listener("ALBListenerHttps", port=443, certificates=[
+                                          certificate], protocol=elbv2.ApplicationProtocol.HTTPS, ssl_policy=elbv2.SslPolicy.TLS12)
         https_listener.add_targets("Target", port=80, targets=[asg])
 
-        https_listener.connections.allow_default_port_from_any_ipv4("Open to the world")
-
-        # http_listner = alb.add_listener("ALBListenerHttp", port=80, protocol=elbv2.ApplicationProtocol.HTTP)
-        # http_listner.add_targets("Target", port=80, targets=[asg])
+        https_listener.connections.allow_default_port_from_any_ipv4(
+            "Open to the world")
 
         asg.scale_on_request_count("AModestLoad", target_requests_per_second=1)
 
@@ -91,4 +113,4 @@ class CdkLampstackStack(cdk.Stack):
                                    web_acl_arn=wafacl_alb_arn)
 
         core.CfnOutput(self, "LoadBalancer", export_name="LoadBalancer",
-                       value=alb.load_balancer_dns_name) 
+                       value=alb.load_balancer_dns_name)

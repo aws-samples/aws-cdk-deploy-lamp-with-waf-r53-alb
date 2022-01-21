@@ -17,4 +17,3 @@
  '''
  
 npm install -g aws-cdk
-npm install -g cdk-assume-role-credential-plugin

@@ -3,17 +3,11 @@
 ## jsii must be 1.14.1 or better on Python 3.7
 ## https://github.com/aws/aws-cdk/issues/11255
 ##
-jsii>=1.14.1
-cattrs>=1.1.1
+# jsii>=1.14.1
+# cattrs>=1.1.1
 
 ##
 ## CDK Modules
 ##
-aws-cdk.core>=1.115.0
-aws-cdk.aws_wafv2>=1.115.0
-aws-cdk.aws_ec2
-aws-cdk.aws_iam
-aws-cdk.aws_s3_assets
-aws-cdk.aws-elasticloadbalancingv2
-aws-cdk.aws_autoscaling
-aws_cdk.aws_certificatemanager
+aws-cdk-lib>=2.4.0
+constructs>=10.0.0,<11.0.0

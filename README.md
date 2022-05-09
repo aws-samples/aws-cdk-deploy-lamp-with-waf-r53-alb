@@ -4,7 +4,7 @@ LAMP stands for Linux, Apache, MySQL, and PHP.  Together, they provide a time-te
 
 Customers can build a LAMP stack application from scratch or by following this [AWS tutorial](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-LAMP.html). However, the documentation does not dive deep into ways to secure the LAMP stack application against web application vulnerabilities and DDoS attacks. As with any open source project, LAMP stack applications are vulnerable to common web exploits and bots that may affect availability, compromise security, or consume excessive resources. Insecure open source code means software stacks are vulnerable and organizations remain exposed.
 
-In this blog post, we give you prescriptive guidance and automation steps to deploy a secure and highly available LAMP stack application using AWS WAF, Application Load Balancer, AWS Route 53 and secured by a TLS certificate using AWS Certificate Manager. We walk you through how to launch this classic layered architecture LAMP stack application that can host a variety of popular web applications, such as WordPress, Wikipedia, and Drupal in minutes.
+In this blog post, we give you prescriptive guidance and automation steps to deploy a secure and highly available LAMP stack application using AWS WAF, Application Load Balancer, AWS Route 53 and secured by a TLS certificate using AWS Certificate Manager. We walk you through how to launch this classic layered architecture LAMP stack application that can host a variety of popular web applications, such as WordPress, Wikipedia and Drupal in minutes.
 
 ## Solution Overview
 

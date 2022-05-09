@@ -25,4 +25,4 @@ venv.bak/
 .cdk.staging/
 cdk.out/*
 aws-codebuild-docker-images
-cdk.context.jso
+cdk.context.json

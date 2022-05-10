@@ -33,7 +33,7 @@ from cdk_lampstack.waf_regional import WafRegionalStack
 # env = {'region': 'us-east-1'}
 app = App()
 env_USA = Environment(account=var_account_id, region=var_region)
-waf_description = "Deploy WAF ACL (qs-1t1gmgopk)"
+waf_description = "Deploy WAF ACL"
 lamp_description = "Deploy LAMP Stack (qs-1t1gmgopk)"
 
 waf = WafRegionalStack(app, "WafRegionalStack",

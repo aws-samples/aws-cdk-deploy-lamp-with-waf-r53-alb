@@ -12,4 +12,4 @@ The following screenshot shows a high-level solution overview.
 
 ![img](architecture.png)
 
-For a detailed implementation walkthrough, please visit our blog: Using [AWS Web Application Firewall and Amazon Route53 to secure the LAMP stack](https://amazon.awsapps.com/workdocs/index.html#/document/1080b6287172d47efa47ab721c468fc7f2965ecc0478f9a11b661b276a4f3266). 
+For a detailed implementation walkthrough, please visit our blog: Using [AWS Web Application Firewall and Amazon Route53 to secure the LAMP stack](https://aws.amazon.com/blogs/infrastructure-and-automation/secure-lamp-stack-aws-waf-web-application-firewall/). 
